@@ -1,0 +1,28 @@
+{
+  "name": "snake-spinner",
+  "version": "1.0.0",
+  "description": "A spinner that indicates progress transforms into a snake game when the user interacts with it.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shibisuriya/snake-loader.git"
+  },
+  "keywords": [
+    "snake",
+    "snake-game",
+    "loader",
+    "spinner",
+    "game",
+    "youtube",
+    "retro-youtube"
+  ],
+  "author": "Shibi Suriya P",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shibisuriya/snake-loader/issues"
+  },
+  "homepage": "https://github.com/shibisuriya/snake-loader#readme"
+}
