@@ -7,6 +7,7 @@ export default class Grid {
     this.container = container;
     this.makeContainerRelative();
     this.makeGrid();
+    this.initScore();
   }
   makeGrid() {
     for (let i = 0; i < this.columns; i++) {
@@ -27,18 +28,49 @@ export default class Grid {
       }
     }
   }
-  setCell(x, y) {
-    const cell = this.getCell(x, y);
-    cell.classList.add("snake-body-cell");
+  initScore() {
+    const score = document.createElement("div");
+    this.score = 0;
+    Object.assign(score.style, {
+      position: "absolute",
+      top: "2px",
+      right: "2px",
+    });
+    score.className = "game-score";
+    this.getContainer().appendChild(score);
   }
-  resetCell(x, y) {
-    const cell = this.getCell(x, y);
-    cell.classList.remove("snake-body-cell");
+  incrementScore(score = 1) {
+    this.score += score;
+    this.updateScore();
+  }
+  decrementScore(score = 1) {
+    if (this.score >= score) {
+      this.score -= score;
+    }
+    this.updateScore();
   }
   getCell(x, y) {
     const className = this.generateClassName(x, y);
     const [cell] = this.getContainer().getElementsByClassName(className);
     return cell;
+  }
+  setHead(x, y) {
+    this.resetBody(x, y);
+    const cell = this.getCell(x, y);
+    cell.classList.add("snake-cell", "snake-head-cell");
+  }
+  resetHead(x, y) {
+    const cell = this.getCell(x, y);
+    cell.classList.remove("snake-cell", "snake-head-cell");
+  }
+  setBody(x, y) {
+    this.resetHead(x, y);
+    const cell = this.getCell(x, y);
+    cell.classList.add("snake-cell", "snake-body-cell");
+  }
+  resetBody(x, y) {
+    const cell = this.getCell(x, y);
+    cell.classList.remove("snake-cell", "snake-body-cell");
   }
   makeContainerRelative() {
     this.originContainerPosition = this.getContainer().style.position; // TODO: Make sure that this doesn't change on writing to style.position.

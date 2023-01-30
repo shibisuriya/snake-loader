@@ -1,31 +1,34 @@
-import { getContainer } from "./utils.js";
-const rows = 60;
-const columns = 60;
+import { getContainer, dummyAPI } from "./utils.js";
+import SnakeSpinner from "./snakeSpinner.js";
+const cellSize = "20px";
+const columns = 15;
+const rows = 15;
 const container = getContainer();
-const squareSize = "30px";
-for (let i = 0; i < 300; i += parseInt(squareSize)) {
-  for (let j = 0; j < 300; j += parseInt(squareSize)) {
-    const square = document.createElement("div");
-    Object.assign(square.style, {
-      left: `${i}px`,
-      top: `${j}px`,
-      width: squareSize,
-      height: squareSize,
-      position: "absolute",
-      boxSizing: "border-box",
-    });
-    container.appendChild(square);
+const speed = 0.4;
+const snakeSpinner = new SnakeSpinner({
+  container,
+  columns,
+  rows,
+  cellSize,
+  speed,
+  style: {
+    snakeHead: {
+      border: "1px solid black",
+      backgroundColor: "red",
+    },
+    snakeBody: {
+      border: "1px solid green",
+      backgroundColor: "black",
+    },
+    food: {
+      border: "1px solid green",
+      backgroundColor: "yellow",
+    },
+  },
+});
+snakeSpinner.show();
+dummyAPI("https://www.dummy-url.com").then((resp) => {
+  if (resp) {
+    snakeSpinner.hide();
   }
-}
-const getCell = (x, y) => {
-
-
-}
-const snake = [
-  [3, 1],
-  [2, 1],
-  [1, 1],
-];
-setInterval(() => {
-  console.log("set interval");
-}, 1 * 1000);
+});

@@ -17,18 +17,30 @@ export default class SnakeSpinner {
     this.deregisterKeyboard();
     this.stopTimer();
   }
+  show() {}
+  hide() {}
+  spawnFood() {
+    const rows = this.grid.rows();
+    const columns = this.grid.columns();
+    // We need to generate two random numbers, within the range of 0 to the number of rows and columns, respectively.
+  }
   initializeSnake() {
     this.currentDirection = this.moveRight; // The snake moves in right direction when the game starts.
     this.snake = [
+      [7, 0],
+      [6, 0],
+      [5, 0],
       [4, 0],
       [3, 0],
       [2, 0],
       [1, 0],
       [0, 0],
     ];
-    this.snake.forEach((s) => {
-      const [x, y] = s;
-      this.grid.setCell(x, y);
+
+    const [head, ...body] = this.snake;
+    this.grid.setHead(...head);
+    body.forEach((piece) => {
+      this.grid.setBody(...piece);
     });
   }
   registerKeyboard() {
@@ -123,12 +135,14 @@ export default class SnakeSpinner {
   }
   move() {
     const [head] = this.snake;
-    const [x, y] = this.currentDirection(head[0], head[1]);
+    this.grid.setBody(...head);
+    const [x, y] = this.currentDirection(...head);
     this.snake.unshift([x, y]);
-    this.grid.setCell(x, y);
+    this.grid.setHead(x, y);
 
     const tail = this.snake.pop();
-    this.grid.resetCell(tail[0], tail[1]);
+    this.grid.resetBody(...tail);
+    console.log(this.snake);
   }
   /**
    * This function determines if the two directions passed as arguments are opposite to each other or not.
