@@ -8,9 +8,16 @@ export default class SnakeSpinner {
       rows,
       container,
     });
-    this.initializeSnake();
-    this.registerKeyboard();
-    this.startTimer();
+
+    this.grid.setCell(0, 0, ["test"]);
+    this.grid.setCell(0, 0, ["snake-head-cell", "snake-cell"]);
+    this.grid.setCell(0, 0, ["snake-body-cell", "snake-cell"]);
+
+    // this.grid.setCell(0, 1, ["snake-cell"]);
+    // this.grid.resetCell(0, 0);
+    // this.initializeSnake();
+    // this.registerKeyboard();
+    // this.startTimer();
   }
   onDestory() {
     this.grid.onDestory();
@@ -143,6 +150,25 @@ export default class SnakeSpinner {
     const tail = this.snake.pop();
     this.grid.resetBody(...tail);
     console.log(this.snake);
+
+    // setHead(x, y) {
+    //   this.resetBody(x, y);
+    //   const cell = this.getCell(x, y);
+    //   cell.addClasses("snake-cell", "snake-head-cell");
+    // }
+    // resetHead(x, y) {
+    //   const cell = this.getCell(x, y);
+    //   cell.removeClasses("snake-cell", "snake-head-cell");
+    // }
+    // setBody(x, y) {
+    //   this.resetHead(x, y);
+    //   const cell = this.getCell(x, y);
+    //   cell.addClasses("snake-cell", "snake-body-cell");
+    // }
+    // resetBody(x, y) {
+    //   const cell = this.getCell(x, y);
+    //   cell.removeClasses("snake-cell", "snake-body-cell");
+    // }
   }
   /**
    * This function determines if the two directions passed as arguments are opposite to each other or not.

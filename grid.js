@@ -1,3 +1,4 @@
+import Cell from "./cell.js";
 export default class Grid {
   // The 'Grid' class is tightly coupled with the 'SnakeSpinner' class.
   constructor({ cellSize, columns, rows, container }) {
@@ -5,82 +6,82 @@ export default class Grid {
     this.columns = columns;
     this.rows = rows;
     this.container = container;
+    this.cells = {};
     this.makeContainerRelative();
-    this.makeGrid();
-    this.initScore();
+    this.createGrid();
   }
-  makeGrid() {
+  createGrid() {
     for (let i = 0; i < this.columns; i++) {
       for (let j = 0; j < this.rows; j++) {
-        const cell = document.createElement("div");
-        const left = `${i * parseInt(this.cellSize)}px`;
-        const top = `${j * parseInt(this.cellSize)}px`;
-        Object.assign(cell.style, {
-          left,
-          top,
-          width: this.cellSize,
-          height: this.cellSize,
-          position: "absolute",
-          boxSizing: "border-box",
+        const pos = {
+          left: `${i * parseInt(this.cellSize)}px`,
+          top: `${j * parseInt(this.cellSize)}px`,
+        };
+        const id = {
+          x: i,
+          y: j,
+        };
+        const cell = new Cell({
+          pos,
+          id,
+          cellSize: this.cellSize,
+          helpers: {
+            getContainer: this.getContainer.bind(this),
+          },
         });
-        cell.className = this.generateClassName(i, j); // Allows random access using getElementsByClassName().
-        this.getContainer().appendChild(cell);
+        const key = this.generateKey(i, j);
+        this.cells[key] = cell;
       }
     }
   }
-  initScore() {
-    const score = document.createElement("div");
-    this.score = 0;
-    Object.assign(score.style, {
-      position: "absolute",
-      top: "2px",
-      right: "2px",
-    });
-    score.className = "game-score";
-    this.getContainer().appendChild(score);
-  }
-  incrementScore(score = 1) {
-    this.score += score;
-    this.updateScore();
-  }
-  decrementScore(score = 1) {
-    if (this.score >= score) {
-      this.score -= score;
-    }
-    this.updateScore();
-  }
+
+  /**
+   * Retrieves a cell object from the grid.
+   *
+   * @param {number} x - The x coordinate of the cell.
+   * @param {number} y - The y coordinate of the cell.
+   *
+   * @returns {Object} The cell object at the specified x and y coordinates.
+   */
   getCell(x, y) {
-    const className = this.generateClassName(x, y);
-    const [cell] = this.getContainer().getElementsByClassName(className);
-    return cell;
+    const key = this.generateKey(x, y);
+    return this.cells[key];
   }
-  setHead(x, y) {
-    this.resetBody(x, y);
-    const cell = this.getCell(x, y);
-    cell.classList.add("snake-cell", "snake-head-cell");
+
+  /**
+   * Assigns CSS classes to a cell element.
+   *
+   * @param {number} x - The x coordinate of the cell.
+   * @param {number} y - The y coordinate of the cell.
+   * @param {string[]} classes - An array of CSS classes to be assigned to the cell element.
+   */
+  setCell(x, y, classes) {
+    this.getCell(x, y).set(...classes);
   }
-  resetHead(x, y) {
-    const cell = this.getCell(x, y);
-    cell.classList.remove("snake-cell", "snake-head-cell");
+
+  /**
+   * Removes CSS classes from a cell object.
+   *
+   * @param {number} x - The x coordinate of the cell.
+   * @param {number} y - The y coordinate of the cell.
+   */
+  resetCell(x, y) {
+    this.getCell(x, y).reset();
   }
-  setBody(x, y) {
-    this.resetHead(x, y);
-    const cell = this.getCell(x, y);
-    cell.classList.add("snake-cell", "snake-body-cell");
-  }
-  resetBody(x, y) {
-    const cell = this.getCell(x, y);
-    cell.classList.remove("snake-cell", "snake-body-cell");
-  }
+
+  /**
+   * Changes the position of the container HTML element to relative.
+   */
   makeContainerRelative() {
     this.originContainerPosition = this.getContainer().style.position; // TODO: Make sure that this doesn't change on writing to style.position.
     this.getContainer().style.position = "relative";
   }
+
+  /**
+   * Resets the position of the container element to its original state before the snake-spinner was initialized.
+   */
   resetContainerPosition() {
     this.getContainer().style.position = this.originContainerPosition;
-  }
-  generateClassName(x, y) {
-    return `pos(${x}, ${y})`;
   }
   getContainer() {
     return this.container;
@@ -94,7 +95,25 @@ export default class Grid {
   getColumns() {
     return this.columns;
   }
-  onDestory() {
+  getCells() {
+    return this.cells;
+  }
+  destory() {
     this.resetContainerPosition();
+  }
+
+  /**
+   * Generates a unique key based on the given x and y coordinates.
+   *
+   * @param {number} i - The x coordinate.
+   * @param {number} j - The y coordinate.
+   * @returns {string} The generated unique key.
+   * @throws Will throw an error if either i is more than the number of columns or j is more than the number of rows.
+   */
+  generateKey(i, j) {
+    if (i > this.columns || j > this.rows) {
+      throw new Error(`Error: Invalid coordinates. i: ${i}, j: ${j}`);
+    }
+    return `${i}-${j}`;
   }
 }
