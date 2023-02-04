@@ -1,192 +1,97 @@
 import Grid from "./grid.js";
+import Snake from "./snake.js";
 export default class SnakeSpinner {
-  constructor({ container, cellSize, columns, rows, speed = 2, style } = {}) {
+  // The MVC architecture's controller is handled by this class.
+  constructor({ container, cellSize, columns, rows, speed = 2 } = {}) {
+    this.container = container;
+    this.cellSize = cellSize;
+    this.columns = columns;
+    this.rows = rows;
     this.speed = speed;
+    this.helpers = {
+      getCellSize: this.getCellSize.bind(this),
+      getColumns: this.getColumns.bind(this),
+      getRows: this.getRows.bind(this),
+      getContainer: this.getContainer.bind(this),
+    };
     this.grid = new Grid({
-      cellSize,
-      columns,
-      rows,
-      container,
+      helpers: this.helpers,
     });
-
-    this.grid.setCell(0, 0, ["test"]);
-    this.grid.setCell(0, 0, ["snake-head-cell", "snake-cell"]);
-    this.grid.setCell(0, 0, ["snake-body-cell", "snake-cell"]);
-
-    // this.grid.setCell(0, 1, ["snake-cell"]);
-    // this.grid.resetCell(0, 0);
-    // this.initializeSnake();
-    // this.registerKeyboard();
-    // this.startTimer();
+    this.snake = new Snake({ helpers: this.helpers, grid: this.grid });
+    this.registerKeyboard();
+    this.startTimer();
+  }
+  startTimer() {
+    this.timer = setInterval(() => {
+      try {
+        this.snake.next();
+      } catch (err) {
+        console.error(err);
+        this.stopTimer();
+        this.deregisterKeyboard();
+      }
+    }, this.getSpeed() * 1000);
+  }
+  stopTimer() {
+    clearInterval(this.timer);
+  }
+  deregisterKeyboard() {
+    this.abortController.abort();
   }
   onDestory() {
     this.grid.onDestory();
-    this.deregisterKeyboard();
-    this.stopTimer();
-  }
-  show() {}
-  hide() {}
-  spawnFood() {
-    const rows = this.grid.rows();
-    const columns = this.grid.columns();
-    // We need to generate two random numbers, within the range of 0 to the number of rows and columns, respectively.
-  }
-  initializeSnake() {
-    this.currentDirection = this.moveRight; // The snake moves in right direction when the game starts.
-    this.snake = [
-      [7, 0],
-      [6, 0],
-      [5, 0],
-      [4, 0],
-      [3, 0],
-      [2, 0],
-      [1, 0],
-      [0, 0],
-    ];
-
-    const [head, ...body] = this.snake;
-    this.grid.setHead(...head);
-    body.forEach((piece) => {
-      this.grid.setBody(...piece);
-    });
+    this.snake.destroy();
   }
   registerKeyboard() {
     this.abortController = new AbortController();
     window.addEventListener(
       "keydown",
       (({ key }) => {
-        console.log(key);
         switch (key) {
           case "w":
           case "W":
           case "ArrowUp":
-            if (
-              !this.isOppositeDirection(this.currentDirection, this.moveTop)
-            ) {
-              this.currentDirection = this.moveTop;
-              this.move();
-            }
+            this.snake.changeDirection("top");
+            this.snake.next();
             break;
           case "s":
           case "S":
           case "ArrowDown":
-            if (
-              !this.isOppositeDirection(this.currentDirection, this.moveBottom)
-            ) {
-              this.currentDirection = this.moveBottom;
-              this.move();
-            }
+            this.snake.changeDirection("bottom");
+            this.snake.next();
             break;
           case "a":
           case "A":
           case "ArrowLeft":
-            if (
-              !this.isOppositeDirection(this.currentDirection, this.moveLeft)
-            ) {
-              this.currentDirection = this.moveLeft;
-              this.move();
-            }
+            this.snake.changeDirection("left");
+            this.snake.next();
             break;
           case "d":
           case "D":
           case "ArrowRight":
-            if (
-              !this.isOppositeDirection(this.currentDirection, this.moveRight)
-            ) {
-              this.currentDirection = this.moveRight;
-              this.move();
-            }
-
+            this.snake.changeDirection("right");
+            this.snake.next();
             break;
         }
       }).bind(this),
       { signal: this.abortController.signal }
     );
   }
-  deregisterKeyboard() {
-    this.abortController.abort();
+  show() {}
+  hide() {}
+  getContainer() {
+    return this.container;
   }
-  startTimer() {
-    this.timer = setInterval(this.move.bind(this), this.speed * 1000);
+  getCellSize() {
+    return this.cellSize;
   }
-  stopTimer() {
-    clearInterval(this.timer);
+  getColumns() {
+    return this.columns;
   }
-  moveLeft(x, y) {
-    if (x > 0) {
-      return [--x, y];
-    } else {
-      alert("You have hit the left wall.");
-    }
+  getRows() {
+    return this.rows;
   }
-  moveRight(x, y) {
-    if (x < this.grid.getColumns()) {
-      return [++x, y];
-    } else {
-      alert("You have hit the right wall.");
-    }
-  }
-  moveTop(x, y) {
-    if (x > 0) {
-      return [x, --y];
-    } else {
-      alert("You have hit the top wall.");
-    }
-  }
-  moveBottom(x, y) {
-    if (x < this.grid.getRows()) {
-      return [x, ++y];
-    } else {
-      alert("You have hit the bottom wall.");
-    }
-  }
-  move() {
-    const [head] = this.snake;
-    this.grid.setBody(...head);
-    const [x, y] = this.currentDirection(...head);
-    this.snake.unshift([x, y]);
-    this.grid.setHead(x, y);
-
-    const tail = this.snake.pop();
-    this.grid.resetBody(...tail);
-    console.log(this.snake);
-
-    // setHead(x, y) {
-    //   this.resetBody(x, y);
-    //   const cell = this.getCell(x, y);
-    //   cell.addClasses("snake-cell", "snake-head-cell");
-    // }
-    // resetHead(x, y) {
-    //   const cell = this.getCell(x, y);
-    //   cell.removeClasses("snake-cell", "snake-head-cell");
-    // }
-    // setBody(x, y) {
-    //   this.resetHead(x, y);
-    //   const cell = this.getCell(x, y);
-    //   cell.addClasses("snake-cell", "snake-body-cell");
-    // }
-    // resetBody(x, y) {
-    //   const cell = this.getCell(x, y);
-    //   cell.removeClasses("snake-cell", "snake-body-cell");
-    // }
-  }
-  /**
-   * This function determines if the two directions passed as arguments are opposite to each other or not.
-   * @param {*} d1 - Direction 1
-   * @param {*} d2 - Direction 2
-   */
-  isOppositeDirection(d1, d2) {
-    // Sloppy, but fast  :)
-    if (d1 == this.moveLeft && d2 == this.moveRight) {
-      return true;
-    } else if (d1 == this.moveRight && d2 == this.moveLeft) {
-      return true;
-    } else if (d1 == this.moveTop && d2 == this.moveBottom) {
-      return true;
-    } else if (d1 == this.moveBottom && d2 == this.moveTop) {
-      return true;
-    } else {
-      return false;
-    }
+  getSpeed() {
+    return this.speed;
   }
 }

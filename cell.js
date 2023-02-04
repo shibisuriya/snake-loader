@@ -1,10 +1,9 @@
 export default class Cell {
-  constructor({ pos, id, cellSize, helpers }) {
+  constructor({ pos, id, helpers }) {
     // The 'Cell' class is tightly couple with the 'Grid' class.
     this.helpers = helpers;
     this.pos = pos;
     this.id = id;
-    this.cellSize = cellSize;
     this.createCell();
   }
   createCell() {
@@ -13,15 +12,15 @@ export default class Cell {
     Object.assign(cell.style, {
       left,
       top,
-      width: this.cellSize,
-      height: this.cellSize,
+      width: this.helpers.getCellSize(),
+      height: this.helpers.getCellSize(),
       position: "absolute",
       boxSizing: "border-box",
     });
     this.element = cell;
     this.helpers.getContainer().appendChild(cell);
   }
-  set(...classes) {
+  set(classes) {
     this.reset();
     this.getElement().classList.add(...classes);
   }

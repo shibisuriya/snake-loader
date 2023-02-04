@@ -1,21 +1,20 @@
 import Cell from "./cell.js";
 export default class Grid {
   // The 'Grid' class is tightly coupled with the 'SnakeSpinner' class.
-  constructor({ cellSize, columns, rows, container }) {
-    this.cellSize = cellSize;
-    this.columns = columns;
-    this.rows = rows;
-    this.container = container;
+  // The MVC architecture's view is handled by this class.
+  constructor({ helpers }) {
+    console.log(helpers);
+    this.helpers = helpers;
     this.cells = {};
     this.makeContainerRelative();
     this.createGrid();
   }
   createGrid() {
-    for (let i = 0; i < this.columns; i++) {
-      for (let j = 0; j < this.rows; j++) {
+    for (let i = 0; i < this.helpers.getColumns(); i++) {
+      for (let j = 0; j < this.helpers.getRows(); j++) {
         const pos = {
-          left: `${i * parseInt(this.cellSize)}px`,
-          top: `${j * parseInt(this.cellSize)}px`,
+          left: `${i * parseInt(this.helpers.getCellSize())}px`,
+          top: `${j * parseInt(this.helpers.getCellSize())}px`,
         };
         const id = {
           x: i,
@@ -24,10 +23,7 @@ export default class Grid {
         const cell = new Cell({
           pos,
           id,
-          cellSize: this.cellSize,
-          helpers: {
-            getContainer: this.getContainer.bind(this),
-          },
+          helpers: this.helpers,
         });
         const key = this.generateKey(i, j);
         this.cells[key] = cell;
@@ -73,15 +69,16 @@ export default class Grid {
    * Changes the position of the container HTML element to relative.
    */
   makeContainerRelative() {
-    this.originContainerPosition = this.getContainer().style.position; // TODO: Make sure that this doesn't change on writing to style.position.
-    this.getContainer().style.position = "relative";
+    const container = this.helpers.getContainer();
+    this.originContainerPosition = container.style.position; // TODO: Make sure that this doesn't change on writing to style.position.
+    container.style.position = "relative";
   }
 
   /**
    * Resets the position of the container element to its original state before the snake-spinner was initialized.
    */
   resetContainerPosition() {
-    this.getContainer().style.position = this.originContainerPosition;
+    this.helpers.getContainer().style.position = this.originContainerPosition;
   }
   getContainer() {
     return this.container;

@@ -4,7 +4,7 @@ const cellSize = "20px";
 const columns = 15;
 const rows = 15;
 const container = getContainer();
-const speed = 0.4;
+const speed = 1;
 const snakeSpinner = new SnakeSpinner({
   container,
   columns,
