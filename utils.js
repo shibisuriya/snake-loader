@@ -40,3 +40,8 @@ const generateRandomNumber = (min, max) => {
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+export const randomIntFromInterval = (min, max) => {
+	// min and max included
+	return Math.floor(Math.random() * (max - min + 1) + min);
+};

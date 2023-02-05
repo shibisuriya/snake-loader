@@ -17,19 +17,26 @@ export default class Grid {
 					left: `${i * parseInt(this.helpers.getCellSize())}px`,
 					top: `${j * parseInt(this.helpers.getCellSize())}px`,
 				};
-				const id = {
-					x: i,
-					y: j,
-				};
+				const data = [i, j];
 				const cell = new Cell({
 					pos,
-					id,
+					data,
 					helpers: this.helpers,
 				});
 				const key = generateKey(i, j, this.helpers.getColumns(), this.helpers.getRows());
 				this.cells[key] = cell;
 			}
 		}
+	}
+
+	/**
+	 * Returns the cells hash.
+	 *
+	 * @function
+	 * @returns {Object} The cells hash.
+	 */
+	getCells() {
+		return this.cells;
 	}
 
 	/**
@@ -42,6 +49,17 @@ export default class Grid {
 	 */
 	getCell(x, y) {
 		const key = generateKey(x, y, this.helpers.getColumns(), this.helpers.getRows());
+		return this.getCellUsingKey(key);
+	}
+
+	/**
+	 * Returns the cell object with the given key.
+	 *
+	 * @function
+	 * @param {string} key - The key of the cell, generated using `generateKey` from `utils.js`.
+	 * @returns {Object} The cell object with the specified key.
+	 */
+	getCellUsingKey(key) {
 		return this.cells[key];
 	}
 
@@ -54,6 +72,10 @@ export default class Grid {
 	 */
 	setCell(x, y, classes) {
 		this.getCell(x, y).set(...classes);
+	}
+	setCellUsingKey(key, classes) {
+		const cell = this.getCellUsingKey(key);
+		cell.set(classes);
 	}
 
 	/**
@@ -80,21 +102,6 @@ export default class Grid {
 	 */
 	resetContainerPosition() {
 		this.helpers.getContainer().style.position = this.originContainerPosition;
-	}
-	getContainer() {
-		return this.container;
-	}
-	getCellSize() {
-		return this.cellSize;
-	}
-	getRows() {
-		return this.rows;
-	}
-	getColumns() {
-		return this.columns;
-	}
-	getCells() {
-		return this.cells;
 	}
 	destory() {
 		this.resetContainerPosition();

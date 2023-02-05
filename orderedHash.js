@@ -1,6 +1,6 @@
 import { generateKey } from './utils.js';
 export default class OrderedHash {
-	constructor({ list, columns, rows }) {
+	constructor({ list = [], columns, rows } = {}) {
 		this.columns = columns;
 		this.rows = rows;
 		this.orderedHash = {};

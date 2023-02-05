@@ -1,48 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
-      /* * {
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			/* * {
         outline: 1px dotted black !important;
       } */
-      .container {
-        width: 300px;
-        height: 300px;
-        margin-left: 30px;
-        margin-top: 30px;
-        border: 1px dotted rgb(1, 2, 8);
-      }
-      body {
-        margin: 0px;
-      }
-      .food {
-        background-color: green;
-        padding: 4px;
-        border: 1px solid green;
-        background-clip: content-box;
-        border-radius: 2px;
-      }
-      .snake-cell {
-        padding: 1.5px;
-        background-clip: content-box;
-        border-radius: 2px;
-      }
-      .snake-body-cell {
-        background-color: rgb(1, 2, 8);
-        border: 1px solid rgb(1, 2, 8);
-      }
-      .snake-head-cell {
-        background-color: red;
-        border: 1px solid rgb(1, 2, 8);
-      }
-    </style>
-    <script type="module" src="./index.js" defer></script>
-  </head>
-  <body>
-    <div class="container"></div>
-  </body>
+			.container {
+				width: 300px;
+				height: 300px;
+				margin-left: 30px;
+				margin-top: 30px;
+				border: 1px solid rgb(1, 2, 8);
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0px;
+			}
+			.snake-food {
+				background-color: rgb(104, 66, 180);
+				padding: 3px;
+				border: 1px solid rgb(104, 66, 180);
+				background-clip: content-box;
+				border-radius: 2px;
+			}
+			.snake-cell {
+				padding: 1.5px;
+				background-clip: content-box;
+				border-radius: 2px;
+			}
+			.snake-body-cell {
+				background-color: rgb(1, 2, 8);
+				border: 1px solid rgb(1, 2, 8);
+			}
+			.snake-head-cell {
+				background-color: red;
+				border: 1px solid rgb(1, 2, 8);
+			}
+		</style>
+		<script type="module" src="./index.js" defer></script>
+	</head>
+	<body>
+		<div class="container"></div>
+	</body>
 </html>

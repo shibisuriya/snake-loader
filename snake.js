@@ -123,6 +123,9 @@ export default class Snake {
 			throw new Error("Error: You have hit the 'bottom' wall.");
 		}
 	}
+	getCells() {
+		return this.snake.getOrderedHash();
+	}
 
 	/**
 	 * This function determines if the two directions passed as arguments are opposite to each other or not.
