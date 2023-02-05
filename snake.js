@@ -1,8 +1,9 @@
 import OrderedHash from './orderedHash.js';
 export default class Snake {
 	// The MVC architecture's model of the snake is handled by this class.
-	constructor({ helpers, grid }) {
+	constructor({ helpers, grid, foods }) {
 		this.grid = grid;
+		this.foods = foods;
 		this.helpers = helpers;
 		this.initializeSnake();
 	}
@@ -43,10 +44,14 @@ export default class Snake {
 		this.grid.getCell(...head).set(['snake-body-cell', 'snake-cell']);
 		this.grid.getCell(...newHead).set(['snake-head-cell', 'snake-cell']);
 
-		// Create the illusion of movement by cutting off the tail of the snake.
-		const tail = this.snake.getTail();
-		this.snake.remove(...tail); // Remove tail, that is, the last piece.
-		this.grid.getCell(...tail).reset();
+		if (!this.foods.get(...newHead)) {
+			// Create the illusion of movement by cutting off the tail of the snake.
+			const tail = this.snake.getTail();
+			this.snake.remove(...tail); // Remove tail, that is, the last piece.
+			this.grid.getCell(...tail).reset();
+		} else {
+			this.foods.remove(...newHead);
+		}
 	}
 	resetView() {
 		this.snake.forEach((s) => {

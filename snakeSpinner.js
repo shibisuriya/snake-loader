@@ -19,8 +19,8 @@ export default class SnakeSpinner {
 		this.grid = new Grid({
 			helpers: this.helpers,
 		});
-		this.snake = new Snake({ helpers: this.helpers, grid: this.grid });
 		this.foods = new OrderedHash();
+		this.snake = new Snake({ helpers: this.helpers, grid: this.grid, foods: this.foods });
 		this.registerKeyboard();
 		this.startTimer();
 	}
