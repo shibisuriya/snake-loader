@@ -77,6 +77,10 @@ export default class SnakeSpinner {
       { signal: this.abortController.signal }
     );
   }
+  spawnFood() {
+    
+
+  }
   show() {}
   hide() {}
   getContainer() {
