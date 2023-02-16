@@ -38,9 +38,13 @@ export default class SnakeSpinner {
 	snakeNextMove() {
 		try {
 			this.snake.next();
-		} catch (err) {
-			console.error(err);
-			this.stopGame();
+		} catch (outcome) {
+			if (outcome === exceptions.foodEaten) {
+				this.incrementScore();
+			} else {
+				console.error(outcome);
+				this.stopGame();
+			}
 		}
 	}
 	startTimer() {

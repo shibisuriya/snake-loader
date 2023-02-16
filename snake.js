@@ -52,6 +52,7 @@ export default class Snake {
 			this.grid.getCell(...tail).reset();
 		} else {
 			this.foods.remove(...newHead);
+			throw exceptions.foodEaten;
 		}
 	}
 	resetView() {

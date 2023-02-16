@@ -1,4 +1,5 @@
 export default {
+	// Negative.
 	selfBite: new Error('Error: The snake has bitten itself.'),
 	negativeScore: new Error('Error: Score cannot be negative.'),
 	oppositeDirection: new Error('Error: You are trying to move in the opposite direction.'),
@@ -10,4 +11,7 @@ export default {
 	ranIntoBottomWall: new Error("Error: You have hit the 'bottom' wall."),
 	corruptSnakeData: new Error('Error: Snake data is corrupt.'),
 	invalidCoordinates: (i, j) => new Error(`Error: Invalid coordinates. i -> ${i}, j -> ${j}.`),
+
+	// Positive.
+	foodEaten: 'Food eaten.',
 };
