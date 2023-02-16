@@ -1,3 +1,4 @@
+import exceptions from './exceptions.js';
 import OrderedHash from './orderedHash.js';
 export default class Snake {
 	// The MVC architecture's model of the snake is handled by this class.
@@ -37,7 +38,7 @@ export default class Snake {
 
 		// Make sure the snake hasn't bitten itself.
 		if (this.isPartOfSnake(...newHead)) {
-			throw new Error('Error: The snake has bitten itself.');
+			throw exceptions.selfBite;
 		} else {
 			this.snake.unshift(...newHead);
 		}
@@ -72,60 +73,60 @@ export default class Snake {
 				if (oppositeDirection != this.moveLeft) {
 					this.direction = this.moveLeft;
 				} else {
-					throw new Error('Error: You are trying to move in the opposite direction.');
+					throw exceptions.oppositeDirection;
 				}
 				break;
 			case 'right':
 				if (oppositeDirection != this.moveRight) {
 					this.direction = this.moveRight;
 				} else {
-					throw new Error('Error: You are trying to move in the opposite direction.');
+					throw exceptions.oppositeDirection;
 				}
 				break;
 			case 'top':
 				if (oppositeDirection != this.moveTop) {
 					this.direction = this.moveTop;
 				} else {
-					throw new Error('Error: You are trying to move in the opposite direction.');
+					throw exceptions.oppositeDirection;
 				}
 				break;
 			case 'bottom':
 				if (oppositeDirection != this.moveBottom) {
 					this.direction = this.moveBottom;
 				} else {
-					throw new Error('Error: You are trying to move in the opposite direction.');
+					throw exceptions.oppositeDirection;
 				}
 				break;
 			default:
-				throw new Error('Error: Invalid direction');
+				throw exceptions.invalidDirection;
 		}
 	}
 	moveLeft(x, y) {
 		if (x > 0) {
 			return [--x, y];
 		} else {
-			throw new Error("Error: You have hit the 'left' wall.");
+			throw exceptions.ranIntoLeftWall;
 		}
 	}
 	moveRight(x, y) {
 		if (x < this.helpers.getColumns() - 1) {
 			return [++x, y];
 		} else {
-			throw new Error("Error: You have hit the 'right' wall.");
+			throw exceptions.ranIntoRightWall;
 		}
 	}
 	moveTop(x, y) {
 		if (y > 0) {
 			return [x, --y];
 		} else {
-			throw new Error("Error: You have hit the 'top' wall.");
+			throw exceptions.ranIntoTopWall;
 		}
 	}
 	moveBottom(x, y) {
 		if (y < this.helpers.getRows() - 1) {
 			return [x, ++y];
 		} else {
-			throw new Error("Error: You have hit the 'bottom' wall.");
+			throw exceptions.ranIntoBottomWall;
 		}
 	}
 	getCells() {
@@ -157,7 +158,7 @@ export default class Snake {
 				return this.moveBottom;
 			}
 		} else {
-			throw new Error('Error: Snake data is corrpt.');
+			throw exceptions.corruptSnakeData;
 		}
 	}
 }

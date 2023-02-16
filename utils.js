@@ -1,3 +1,4 @@
+import exceptions from './exceptions.js';
 export const getContainer = () => {
 	const [container] = document.getElementsByClassName('container');
 	return container;
@@ -13,7 +14,7 @@ export const getContainer = () => {
  */
 export const generateKey = (i, j, columns, rows) => {
 	if (i > columns || j > rows) {
-		throw new Error(`Error: Invalid coordinates. i: ${i}, j: ${j}`);
+		throw exceptions.invalidCoordinates(i, j);
 	}
 	return `${i}-${j}`;
 };

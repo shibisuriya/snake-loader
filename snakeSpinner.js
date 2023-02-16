@@ -2,14 +2,17 @@ import Grid from './grid.js';
 import OrderedHash from './orderedHash.js';
 import Snake from './snake.js';
 import { randomIntFromInterval } from './utils.js';
+import Score from './score.js';
+import exceptions from './exceptions.js';
 export default class SnakeSpinner {
 	// The MVC architecture's controller is handled by this class.
-	constructor({ container, cellSize, columns, rows, speed = 2 } = {}) {
+	constructor({ container, cellSize, columns, rows, speed = 2, scorePerFoodPiece = 5 } = {}) {
 		this.container = container;
 		this.cellSize = cellSize;
 		this.columns = columns;
 		this.rows = rows;
 		this.speed = speed;
+		this.scorePerFoodPiece = scorePerFoodPiece;
 		this.helpers = {
 			getCellSize: this.getCellSize.bind(this),
 			getColumns: this.getColumns.bind(this),
@@ -21,20 +24,35 @@ export default class SnakeSpinner {
 		});
 		this.foods = new OrderedHash();
 		this.snake = new Snake({ helpers: this.helpers, grid: this.grid, foods: this.foods });
+		this.score = new Score({ helpers: this.helpers, score: 0 });
 		this.registerKeyboard();
 		this.startTimer();
 	}
+	stopGame() {
+		this.stopTimer();
+		this.deregisterKeyboard();
+	}
+	incrementScore() {
+		this.score.increment(this.scorePerFoodPiece);
+	}
+	snakeNextMove() {
+		try {
+			this.snake.next();
+		} catch (err) {
+			console.error(err);
+			this.stopGame();
+		}
+	}
 	startTimer() {
 		this.timer = setInterval(() => {
+			this.snakeNextMove();
 			try {
-				this.snake.next();
 				this.spawnFood();
 			} catch (err) {
 				console.error(err);
-				this.stopTimer();
-				this.deregisterKeyboard();
+				this.stopGame();
 			}
-		}, this.getSpeed() * 1000);
+		}, this.speed * 1000);
 	}
 	stopTimer() {
 		clearInterval(this.timer);
@@ -46,6 +64,14 @@ export default class SnakeSpinner {
 		this.grid.onDestory();
 		this.snake.destroy();
 	}
+	changeDirection(direction) {
+		try {
+			this.snake.changeDirection(direction);
+			this.snakeNextMove();
+		} catch (err) {
+			console.error(err);
+		}
+	}
 	registerKeyboard() {
 		this.abortController = new AbortController();
 		window.addEventListener(
@@ -55,26 +81,22 @@ export default class SnakeSpinner {
 					case 'w':
 					case 'W':
 					case 'ArrowUp':
-						this.snake.changeDirection('top');
-						this.snake.next();
+						this.changeDirection('top');
 						break;
 					case 's':
 					case 'S':
 					case 'ArrowDown':
-						this.snake.changeDirection('bottom');
-						this.snake.next();
+						this.changeDirection('bottom');
 						break;
 					case 'a':
 					case 'A':
 					case 'ArrowLeft':
-						this.snake.changeDirection('left');
-						this.snake.next();
+						this.changeDirection('left');
 						break;
 					case 'd':
 					case 'D':
 					case 'ArrowRight':
-						this.snake.changeDirection('right');
-						this.snake.next();
+						this.changeDirection('right');
 						break;
 				}
 			}).bind(this),
@@ -95,9 +117,8 @@ export default class SnakeSpinner {
 			const food = grid[key].getData();
 			this.foods.push(...food);
 			this.grid.setCellUsingKey(key, ['snake-food']);
-			console.log(this.foods);
 		} else {
-			throw new Error('Error: No unoccupied cell is available to generate food for the snake.');
+			throw exceptions.gridFull;
 		}
 	}
 	show() {}
@@ -113,8 +134,5 @@ export default class SnakeSpinner {
 	}
 	getRows() {
 		return this.rows;
-	}
-	getSpeed() {
-		return this.speed;
 	}
 }

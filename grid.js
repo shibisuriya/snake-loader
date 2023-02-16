@@ -4,7 +4,6 @@ export default class Grid {
 	// The 'Grid' class is tightly coupled with the 'SnakeSpinner' class.
 	// The MVC architecture's view is handled by this class.
 	constructor({ helpers }) {
-		console.log(helpers);
 		this.helpers = helpers;
 		this.cells = {};
 		this.makeContainerRelative();
