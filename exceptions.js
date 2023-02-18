@@ -10,7 +10,9 @@ export default {
 	ranIntoTopWall: new Error("Error: You have hit the 'top' wall."),
 	ranIntoBottomWall: new Error("Error: You have hit the 'bottom' wall."),
 	corruptSnakeData: new Error('Error: Snake data is corrupt.'),
+	snakeAlreadyInGameMode: new Error("Error: Snake already in 'game' mode."),
 	invalidCoordinates: (i, j) => new Error(`Error: Invalid coordinates. i -> ${i}, j -> ${j}.`),
+	invalidMode: (mode) => new Error(`Error: Invalid snakeSpinner mode '${mode}'.`),
 
 	// Positive.
 	foodEaten: 'Food eaten.',

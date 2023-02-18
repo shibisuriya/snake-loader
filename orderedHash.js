@@ -42,6 +42,9 @@ export default class OrderedHash {
 			throw new Error("Error: The key doesn't exists in the 'OrderedHash'.");
 		}
 	}
+	count() {
+		return this.keys.length;
+	}
 	get(x, y) {
 		const key = generateKey(x, y, this.columns, this.rows);
 		return this.orderedHash[key];
@@ -58,6 +61,10 @@ export default class OrderedHash {
 	getHead() {
 		const [head] = this.keys;
 		return this.orderedHash[head];
+	}
+	getBody() {
+		const [head, ...body] = this.keys;
+		return body.map((key) => this.orderedHash[key]);
 	}
 	getTail() {
 		const key = this.keys[this.keys.length - 1];

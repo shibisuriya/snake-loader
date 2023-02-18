@@ -10,8 +10,8 @@
         outline: 1px dotted black !important;
       } */
 			.container {
-				width: 300px;
-				height: 300px;
+				width: 400px;
+				height: 400px;
 				margin-left: 30px;
 				margin-top: 30px;
 				outline: 1px solid rgb(1, 2, 8);
@@ -26,6 +26,41 @@
 				border: 1px solid rgb(104, 66, 180);
 				background-clip: content-box;
 				border-radius: 2px;
+				animation: heartbeat 1.5s ease-in-out infinite both;
+			}
+			@keyframes heartbeat {
+				from {
+					-webkit-transform: scale(1);
+					transform: scale(1);
+					-webkit-transform-origin: center center;
+					transform-origin: center center;
+					-webkit-animation-timing-function: ease-out;
+					animation-timing-function: ease-out;
+				}
+				10% {
+					-webkit-transform: scale(0.91);
+					transform: scale(0.91);
+					-webkit-animation-timing-function: ease-in;
+					animation-timing-function: ease-in;
+				}
+				17% {
+					-webkit-transform: scale(0.98);
+					transform: scale(0.98);
+					-webkit-animation-timing-function: ease-out;
+					animation-timing-function: ease-out;
+				}
+				33% {
+					-webkit-transform: scale(0.87);
+					transform: scale(0.87);
+					-webkit-animation-timing-function: ease-in;
+					animation-timing-function: ease-in;
+				}
+				45% {
+					-webkit-transform: scale(1);
+					transform: scale(1);
+					-webkit-animation-timing-function: ease-out;
+					animation-timing-function: ease-out;
+				}
 			}
 			.snake-cell {
 				padding: 1.5px;
@@ -39,6 +74,10 @@
 			.snake-head-cell {
 				background-color: red;
 				border: 1px solid rgb(1, 2, 8);
+			}
+			@font-face {
+				font-family: 'digit-clock';
+				src: url('./digital-clock-font.ttf') format('truetype');
 			}
 		</style>
 		<script type="module" src="./index.js" defer></script>

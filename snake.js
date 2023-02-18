@@ -1,5 +1,6 @@
 import exceptions from './exceptions.js';
 import OrderedHash from './orderedHash.js';
+import { MODES } from './constants.js';
 export default class Snake {
 	// The MVC architecture's model of the snake is handled by this class.
 	constructor({ helpers, grid, foods }) {
@@ -10,18 +11,17 @@ export default class Snake {
 	}
 	initializeSnake() {
 		this.isGameOver = false;
-		this.direction = this.moveBottom; // Snake's initial direction is 'right'.
+		this.direction = this.moveRight; // Snake's initial direction is 'top'.
+		const x = this.helpers.getColumns() / 2 - 1; // 'columns' should always be even.
+		const y = this.helpers.getRows() / 2 - 1; // 'rows' should always be even.
+		const snake = [
+			[x, y],
+			[x, y + 1],
+			[x + 1, y + 1],
+			[x + 1, y],
+		];
 		this.snake = new OrderedHash({
-			list: [
-				[0, 7], // The head peice is the first element of the array.
-				[0, 6],
-				[0, 5],
-				[0, 4],
-				[0, 3],
-				[0, 2],
-				[0, 1],
-				[0, 0],
-			],
+			list: snake,
 			columns: this.helpers.getColumns(),
 			rows: this.helpers.getRows(),
 		});
@@ -31,7 +31,37 @@ export default class Snake {
 		return !!this.snake.get(x, y);
 	}
 	perish() {}
+	breakout() {
+		// The snakeSpinner is in 'spinner' mode right now.
+		this.helpers.setMode('game');
+		switch (this.direction) {
+			case this.moveBottom:
+				this.changeDirection(this.moveTop);
+				break;
+			case this.moveTop:
+				this.changeDirection(this.moveBottom);
+				break;
+			case this.moveLeft:
+				this.changeDirection(this.moveRight);
+				break;
+			case this.moveRight:
+				this.changeDirection(this.moveLeft);
+				break;
+		}
+	}
+	spin() {
+		const tail = this.snake.getTail();
+		this.snake.remove(...tail);
+		const head = this.snake.getHead();
+		const newHead = this.direction(...head);
+		this.snake.unshift(...newHead);
+		this.grid.getCell(...head).set(['snake-body-cell', 'snake-cell']);
+		this.grid.getCell(...newHead).set(['snake-head-cell', 'snake-cell']);
+		const nextDirection = this.getNextClockwiseDirection(this.direction);
+		this.changeDirection(nextDirection);
+	}
 	next() {
+		const mode = this.helpers.getMode();
 		// Change 'head' into 'neck'.
 		const head = this.snake.getHead();
 		const newHead = this.direction(...head);
@@ -71,6 +101,7 @@ export default class Snake {
 		const oppositeDirection = this.getOppositeDirection();
 		switch (direction) {
 			case 'left':
+			case this.moveLeft:
 				if (oppositeDirection != this.moveLeft) {
 					this.direction = this.moveLeft;
 				} else {
@@ -78,6 +109,7 @@ export default class Snake {
 				}
 				break;
 			case 'right':
+			case this.moveRight:
 				if (oppositeDirection != this.moveRight) {
 					this.direction = this.moveRight;
 				} else {
@@ -85,6 +117,7 @@ export default class Snake {
 				}
 				break;
 			case 'top':
+			case this.moveTop:
 				if (oppositeDirection != this.moveTop) {
 					this.direction = this.moveTop;
 				} else {
@@ -92,6 +125,7 @@ export default class Snake {
 				}
 				break;
 			case 'bottom':
+			case this.moveBottom:
 				if (oppositeDirection != this.moveBottom) {
 					this.direction = this.moveBottom;
 				} else {
@@ -160,6 +194,34 @@ export default class Snake {
 			}
 		} else {
 			throw exceptions.corruptSnakeData;
+		}
+	}
+	getNextClockwiseDirection(currentDirection) {
+		switch (currentDirection) {
+			case this.moveBottom:
+				return this.moveLeft;
+			case this.moveTop:
+				return this.moveRight;
+			case this.moveLeft:
+				return this.moveTop;
+			case this.moveRight:
+				return this.moveBottom;
+			default:
+				throw exceptions.invalidDirection;
+		}
+	}
+	getNextAntiClockwiseDirection(currentDirection) {
+		switch (currentDirection) {
+			case this.moveBottom:
+				return this.moveRight;
+			case this.moveTop:
+				return this.moveLeft;
+			case this.moveLeft:
+				return this.moveBottom;
+			case this.moveRight:
+				return this.moveTop;
+			default:
+				throw exceptions.invalidDirection;
 		}
 	}
 }

@@ -4,20 +4,25 @@ import Snake from './snake.js';
 import { randomIntFromInterval } from './utils.js';
 import Score from './score.js';
 import exceptions from './exceptions.js';
+import { MODES } from './constants.js';
 export default class SnakeSpinner {
 	// The MVC architecture's controller is handled by this class.
-	constructor({ container, cellSize, columns, rows, speed = 2, scorePerFoodPiece = 5 } = {}) {
+	constructor({ container, cellSize, columns, rows, speed = 2, scorePerFoodPiece = 5, maximumFoodPieces = 5 } = {}) {
+		this.setMode('spinner');
 		this.container = container;
 		this.cellSize = cellSize;
 		this.columns = columns;
 		this.rows = rows;
 		this.speed = speed;
 		this.scorePerFoodPiece = scorePerFoodPiece;
+		this.maximumFoodPieces = maximumFoodPieces;
 		this.helpers = {
 			getCellSize: this.getCellSize.bind(this),
 			getColumns: this.getColumns.bind(this),
 			getRows: this.getRows.bind(this),
 			getContainer: this.getContainer.bind(this),
+			getMode: this.getMode.bind(this),
+			setMode: this.setMode.bind(this),
 		};
 		this.grid = new Grid({
 			helpers: this.helpers,
@@ -32,29 +37,36 @@ export default class SnakeSpinner {
 		this.stopTimer();
 		this.deregisterKeyboard();
 	}
+	startGame() {}
 	incrementScore() {
 		this.score.increment(this.scorePerFoodPiece);
 	}
 	snakeNextMove() {
-		try {
-			this.snake.next();
-		} catch (outcome) {
-			if (outcome === exceptions.foodEaten) {
-				this.incrementScore();
-			} else {
-				console.error(outcome);
-				this.stopGame();
+		if (this.mode == 'game') {
+			try {
+				this.snake.next();
+			} catch (outcome) {
+				if (outcome === exceptions.foodEaten) {
+					this.incrementScore();
+				} else {
+					console.error(outcome);
+					this.stopGame();
+				}
 			}
+		} else if (this.mode == 'spinner') {
+			this.snake.spin();
 		}
 	}
 	startTimer() {
 		this.timer = setInterval(() => {
 			this.snakeNextMove();
-			try {
-				this.spawnFood();
-			} catch (err) {
-				console.error(err);
-				this.stopGame();
+			if (this.foods.count() < this.maximumFoodPieces && this.mode == 'game') {
+				try {
+					this.spawnFood();
+				} catch (err) {
+					console.error(err);
+					this.stopGame();
+				}
 			}
 		}, this.speed * 1000);
 	}
@@ -81,27 +93,31 @@ export default class SnakeSpinner {
 		window.addEventListener(
 			'keydown',
 			(({ key }) => {
-				switch (key) {
-					case 'w':
-					case 'W':
-					case 'ArrowUp':
-						this.changeDirection('top');
-						break;
-					case 's':
-					case 'S':
-					case 'ArrowDown':
-						this.changeDirection('bottom');
-						break;
-					case 'a':
-					case 'A':
-					case 'ArrowLeft':
-						this.changeDirection('left');
-						break;
-					case 'd':
-					case 'D':
-					case 'ArrowRight':
-						this.changeDirection('right');
-						break;
+				if (this.mode == 'game') {
+					switch (key) {
+						case 'w':
+						case 'W':
+						case 'ArrowUp':
+							this.changeDirection('top');
+							break;
+						case 's':
+						case 'S':
+						case 'ArrowDown':
+							this.changeDirection('bottom');
+							break;
+						case 'a':
+						case 'A':
+						case 'ArrowLeft':
+							this.changeDirection('left');
+							break;
+						case 'd':
+						case 'D':
+						case 'ArrowRight':
+							this.changeDirection('right');
+							break;
+					}
+				} else if (this.mode == 'spinner') {
+					this.snake.breakout();
 				}
 			}).bind(this),
 			{ signal: this.abortController.signal },
@@ -127,6 +143,16 @@ export default class SnakeSpinner {
 	}
 	show() {}
 	hide() {}
+	setMode(mode) {
+		if (MODES.includes(mode)) {
+			this.mode = mode;
+		} else {
+			throw exceptions.invalidMode(mode);
+		}
+	}
+	getMode() {
+		return this.mode;
+	}
 	getContainer() {
 		return this.container;
 	}

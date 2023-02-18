@@ -33,7 +33,7 @@ export default class Score {
 			color: 'white',
 			backgroundColor: 'black',
 			padding: '3px',
-			borderRadius: '10px',
+			borderRadius: '5px',
 		});
 		this.helpers.getContainer().appendChild(this.element);
 	}
