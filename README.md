@@ -4,7 +4,7 @@ A progress-spinner that transforms into a snake game when the user interacts wit
 
 <center>
 
-![](https://github.com/shibisuriya/snake-spinner/blob/master/demo/demo.mp4)
+![](https://github.com/shibisuriya/snake-spinner/blob/master/demo/demo.gif)
 
 </center>
 
