@@ -23,14 +23,12 @@ export const getDimension = (el) => {
 	return el.getBoundingClientRect();
 };
 
-export const dummyAPI = (url) => {
+export const dummyAPI = (url, { min = 5, max = 10 } = {}) => {
 	return new Promise((resolve, reject) => {
-		const min = 5,
-			max = 10;
 		const randomNumber = generateRandomNumber(min, max);
 		setTimeout(() => {
 			resolve({
-				dummyUrl: 'https://www.google.com',
+				image: 'src/assets/flowers.jpeg',
 			});
 		}, randomNumber * 1000);
 	});
