@@ -23,7 +23,7 @@ export const getDimension = (el) => {
 	return el.getBoundingClientRect();
 };
 
-export const dummyAPI = (url, { min = 5, max = 10 } = {}) => {
+export const dummyAPI = (url, { min = 15, max = 16 } = {}) => {
 	return new Promise((resolve, reject) => {
 		const randomNumber = generateRandomNumber(min, max);
 		setTimeout(() => {

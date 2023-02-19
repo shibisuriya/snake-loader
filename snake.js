@@ -9,6 +9,9 @@ export default class Snake {
 		this.helpers = helpers;
 		this.initializeSnake();
 	}
+	getSnake() {
+		return this.snake
+	}
 	initializeSnake() {
 		this.isGameOver = false;
 		this.direction = this.moveRight; // Snake's initial direction is 'top'.

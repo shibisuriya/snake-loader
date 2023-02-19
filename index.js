@@ -1,10 +1,10 @@
 import { getContainer, dummyAPI } from './utils.js';
 import SnakeSpinner from './snakeSpinner.js';
 const cellSize = '20px';
-const columns = 20;
+const columns = 50;
 const rows = 20;
 const container = getContainer();
-const speed = 0.3;
+const speed = 0.5;
 const snakeSpinner = new SnakeSpinner({
 	container,
 	columns,
@@ -30,7 +30,12 @@ const snakeSpinner = new SnakeSpinner({
 });
 snakeSpinner.show();
 dummyAPI('https://www.dummy-url.com').then((resp) => {
-	if (resp) {
+	const { image } = resp;
+	if (image) {
+		Object.assign(container.style, {
+			backgroundImage: `url(${image})`,
+			backgroundSize: 'cover',
+		});
 		snakeSpinner.hide();
 	}
 });

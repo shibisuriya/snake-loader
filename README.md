@@ -4,7 +4,7 @@ A progress-spinner that transforms into a snake game when the user interacts wit
 
 <center>
 
-![](https://github.com/shibisuriya/snake-spinner/blob/master/demo/1.gif)
+![](https://github.com/shibisuriya/snake-spinner/blob/master/demo/demo.mp4)
 
 </center>
 
@@ -62,10 +62,6 @@ snakeSpinner.stop();
 ## Live demo
 
 [Live demo](https://shibisuriya.github.io/snake-spinner/)
-
-## Trivia
-
-The snake's default design was inspired by Nothings's design concept.
 
 ## License
 

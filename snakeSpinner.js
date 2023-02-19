@@ -118,6 +118,7 @@ export default class SnakeSpinner {
 					}
 				} else if (this.mode == 'spinner') {
 					this.snake.breakout();
+					this.score.enter()
 				}
 			}).bind(this),
 			{ signal: this.abortController.signal },
@@ -142,7 +143,27 @@ export default class SnakeSpinner {
 		}
 	}
 	show() {}
-	hide() {}
+	hide() {
+		this.stopGame();
+		const hash = this.grid.getCells();
+		Object.keys(hash).forEach((c) => {
+			hash[c].element.classList.add('fade-out');
+		});
+		if (this.score) {
+			this.score.hide();
+		}
+		const [head, ...body] = this.snake.getSnake().getArray();
+		this.grid.getCell(...head).set(['snake-head-cell', 'snake-cell', 'snake-perish']);
+		body.forEach((s) => {
+			this.grid.getCell(...s).set(['snake-body-cell', 'snake-cell', 'snake-perish']);
+		});
+
+		const food = this.foods.getArray();
+		food.forEach((f) => {
+			this.grid.getCell(...f).set(['snake-food', 'snake-food-decay']);
+		});
+		console.log(food);
+	}
 	setMode(mode) {
 		if (MODES.includes(mode)) {
 			this.mode = mode;

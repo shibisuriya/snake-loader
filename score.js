@@ -21,6 +21,16 @@ export default class Score {
 	updateScore() {
 		this.element.innerText = String(this.score);
 	}
+	leave() {
+		this.element.classList.add('score-hide');
+	}
+	enter() {
+		this.element.classList.remove('hidden');
+		this.element.classList.add('score-show');
+	}
+	hide() {
+		this.element.classList.add('hidden');
+	}
 	addElement() {
 		this.element = document.createElement('div');
 		this.element.innerText = String(this.score);
@@ -36,6 +46,7 @@ export default class Score {
 			borderRadius: '5px',
 		});
 		this.helpers.getContainer().appendChild(this.element);
+		this.hide();
 	}
 	getElement() {
 		return this.element;
