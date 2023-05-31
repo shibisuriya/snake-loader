@@ -61,7 +61,7 @@ snakeSpinner.stop();
 
 ## Live demo
 
-[Live demo](https://shibisuriya.github.io/snake-spinner/)
+[Live demo](https://shibisuriya.github.io/snake-loader/)
 
 ## License
 
