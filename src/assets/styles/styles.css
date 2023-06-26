@@ -51,7 +51,7 @@ body {
 }
 @font-face {
 	font-family: 'digit-clock';
-	src: url('./digital-clock-font.ttf') format('truetype');
+	src: url('../fonts/digital-clock-font.ttf') format('truetype');
 }
 
 .btn {

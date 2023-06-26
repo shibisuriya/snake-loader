@@ -1,3 +1,9 @@
+// <link rel="stylesheet" href="./styles.css" />
+// <link rel="stylesheet" href="./animations.css" />
+// <script type="module" src="./index.js" defer></script>
+import './assets/styles/styles.css';
+import './assets/styles/animations.css';
+
 import { getContainer, dummyAPI } from './utils.js';
 import SnakeSpinner from './snakeSpinner.js';
 const cellSize = '20px';

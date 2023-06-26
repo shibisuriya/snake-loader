@@ -10,7 +10,7 @@ export default class Snake {
 		this.initializeSnake();
 	}
 	getSnake() {
-		return this.snake
+		return this.snake;
 	}
 	initializeSnake() {
 		this.isGameOver = false;

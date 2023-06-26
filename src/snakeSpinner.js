@@ -118,7 +118,7 @@ export default class SnakeSpinner {
 					}
 				} else if (this.mode == 'spinner') {
 					this.snake.breakout();
-					this.score.enter()
+					this.score.enter();
 				}
 			}).bind(this),
 			{ signal: this.abortController.signal },

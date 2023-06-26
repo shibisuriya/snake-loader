@@ -1,34 +1,39 @@
 {
-  "name": "snake-spinner",
-  "version": "1.0.0",
-  "description": "A spinner that indicates progress transforms into a snake game when the user interacts with it.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shibisuriya/snake-loader.git"
-  },
-  "keywords": [
-    "snake",
-    "snake-game",
-    "loader",
-    "spinner",
-    "game",
-    "youtube",
-    "retro-youtube"
-  ],
-  "author": "Shibi Suriya P",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/shibisuriya/snake-loader/issues"
-  },
-  "homepage": "https://github.com/shibisuriya/snake-loader#readme",
-  "devDependencies": {
-    "html-webpack-plugin": "^5.5.3",
-    "webpack": "^5.88.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
-  }
+	"name": "snake-spinner",
+	"version": "1.0.0",
+	"description": "A spinner that indicates progress transforms into a snake game when the user interacts with it.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "webpack",
+		"dev": "webpack-dev-server"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/shibisuriya/snake-loader.git"
+	},
+	"keywords": [
+		"snake",
+		"snake-game",
+		"loader",
+		"spinner",
+		"game",
+		"youtube",
+		"retro-youtube"
+	],
+	"author": "Shibi Suriya P",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/shibisuriya/snake-loader/issues"
+	},
+	"homepage": "https://github.com/shibisuriya/snake-loader#readme",
+	"devDependencies": {
+		"css-loader": "^6.8.1",
+		"file-loader": "^6.2.0",
+		"html-webpack-plugin": "^5.5.3",
+		"style-loader": "^3.3.3",
+		"webpack": "^5.88.0",
+		"webpack-cli": "^5.1.4",
+		"webpack-dev-server": "^4.15.1"
+	}
 }
