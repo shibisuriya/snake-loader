@@ -26,10 +26,15 @@ export const getDimension = (el) => {
 export const dummyAPI = (url, { min = 5, max = 6 } = {}) => {
 	return new Promise((resolve, reject) => {
 		const randomNumber = generateRandomNumber(min, max);
-		setTimeout(() => {
-			resolve({
-				image: './assets/images/flowers.jpeg',
-			});
+		setTimeout(async () => {
+			const { default: image } = await import('./assets/images/flowers.jpeg');
+			if (image) {
+				resolve({
+					image,
+				});
+			} else {
+				reject('Image not found!');
+			}
 		}, randomNumber * 1000);
 	});
 };

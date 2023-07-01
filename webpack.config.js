@@ -6,6 +6,7 @@ module.exports = {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'bundle.js',
 	},
+	devtool: 'eval-source-map',
 	mode: 'production',
 	entry: './src/index.js',
 	plugins: [
@@ -17,16 +18,22 @@ module.exports = {
 	module: {
 		rules: [
 			{
+				test: /\.js$/,
+				use: 'babel-loader',
+			},
+			{
 				test: /\.css$/,
 				use: ['style-loader', 'css-loader'],
 			},
 			{
-				test: /\.(png|jpe?g|gif)$/i,
+				test: /\.(png|jpe?g|gif|svg)$/i,
 				use: [
 					{
-						loader: 'file-loader',
+						loader: 'url-loader',
 						options: {
-							name: 'images/[name].[ext]',
+							limit: 10240, // Set the limit to 10KB (10240 bytes)
+							name: '[name].[ext]', // Specify the emitted file name
+							outputPath: 'images/', // Output path for emitted files
 						},
 					},
 				],
