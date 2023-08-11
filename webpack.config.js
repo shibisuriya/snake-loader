@@ -7,7 +7,7 @@ module.exports = {
 		filename: 'bundle.js',
 	},
 	devtool: 'eval-source-map',
-	mode: 'production',
+	mode: 'development',
 	entry: './src/index.js',
 	plugins: [
 		new HtmlWebpackPlugin({
