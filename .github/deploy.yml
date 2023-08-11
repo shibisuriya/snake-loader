@@ -1,35 +1,37 @@
-name: Build and Deploy
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - master
+      - master # Change this to the branch you want to trigger the workflow on
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
-
+        
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
-
+          node-version: 14 # Use the version you need
+        
       - name: Install dependencies
         run: npm install
-
-      - name: Build project
-        run: npm run build
-
-      - name: Deploy to gh-pages
+        
+      - name: Build
+        run: npm run build # Change this to your build script
+        
+      - name: Deploy to GitHub Pages
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          git config --global user.email "github-actions-bot@example.com"
+          git config --global user.name "GitHub Actions Bot"
           git checkout --orphan gh-pages
-          git --work-tree dist add --all
-          git --work-tree dist commit -m "Deploying to gh-pages-1"
-          git push origin HEAD:gh-pages --force
-          git checkout -f master
+          git rm -rf .
+          mv dist/* .
+          git add .
+          git commit -m "Deploy to GitHub Pages"
+          git push -f origin gh-pages
+
