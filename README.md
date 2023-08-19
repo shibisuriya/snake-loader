@@ -1,6 +1,6 @@
 # Snake Spinner
 
-A progress-spinner that transforms into a snake game when the user interacts with it.
+A progress-spinner that transforms into a snake game when the user interacts with it. [Live demo.](https://shibisuriya.github.io/snake-loader/)
 
 <center>
 
@@ -62,10 +62,6 @@ snakeSpinner.hide(); // To display the loaded element and conceal the spinner.
 
 snakeSpinner.stop();
 ```
-
-## Live demo
-
-[Live demo](https://shibisuriya.github.io/snake-loader/)
 
 ## License
 
